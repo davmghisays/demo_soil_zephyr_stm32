@@ -1,0 +1,18 @@
+#include <zephyr/dt-bindings/pinctrl/stm32-pinctrl.h>
+
+/ {
+    aliases {
+        /*
+         * LEDs disponibles en Zephyr 4.4.x para la NUCLEO-WL55JC:
+         *
+         * blue_led_1  -> LED1
+         * green_led_2 -> LED2
+         * red_led_3   -> LED3
+         *
+         * Cambia una sola línea para seleccionar el LED físico.
+         */
+        // led0 = &blue_led_1;
+        led0 = &green_led_2;
+        // led0 = &red_led_3;
+    };
+};

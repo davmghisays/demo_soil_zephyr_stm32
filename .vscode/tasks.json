@@ -1,0 +1,216 @@
+{
+  "version": "2.0.0",
+
+  "tasks": [
+    {
+      "label": "West Build (auto)",
+      "type": "process",
+      "command": "C:/ZephyrUPM/zephyrproject-4.4/.venv/Scripts/west.exe",
+      "args": [
+        "build",
+        "-p", "auto",
+        "-b", "nucleo_wl55jc",
+        "${workspaceFolder}",
+        "-d", "${workspaceFolder}/build",
+        "--",
+        "-DDTC_OVERLAY_FILE=boards/nucleo_wl55jc.overlay",
+        "-DCONF_FILE=confs/prj_nucleo_wl55jc.conf"
+      ],
+      "options": {
+        "cwd": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
+        "env": {
+          "ZEPHYR_BASE": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
+          "ZEPHYR_TOOLCHAIN_VARIANT": "zephyr",
+          "ZEPHYR_SDK_INSTALL_DIR": "C:/Users/davma/zephyr-sdk-1.0.1"
+        }
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
+    },
+
+    {
+      "label": "West Build (pristine)",
+      "type": "process",
+      "command": "C:/ZephyrUPM/zephyrproject-4.4/.venv/Scripts/west.exe",
+      "args": [
+        "build",
+        "-p", "always",
+        "-b", "nucleo_wl55jc",
+        "${workspaceFolder}",
+        "-d", "${workspaceFolder}/build",
+        "--",
+        "-DDTC_OVERLAY_FILE=boards/nucleo_wl55jc.overlay",
+        "-DCONF_FILE=confs/prj_nucleo_wl55jc.conf"
+      ],
+      "options": {
+        "cwd": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
+        "env": {
+          "ZEPHYR_BASE": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
+          "ZEPHYR_TOOLCHAIN_VARIANT": "zephyr",
+          "ZEPHYR_SDK_INSTALL_DIR": "C:/Users/davma/zephyr-sdk-1.0.1"
+        }
+      },
+      "problemMatcher": ["$gcc"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
+    },
+
+    {
+      "label": "Flash (CubeProgrammer, UR+HWrst)",
+      "type": "process",
+      "command":
+        "C:/Program Files/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI.exe",
+      "args": [
+        "--connect",
+        "port=swd",
+        "mode=UR",
+        "reset=HWrst",
+        "--download",
+        "${workspaceFolder}/build/zephyr/zephyr.hex",
+        "--start"
+      ],
+      "dependsOn": ["West Build (auto)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+
+    {
+      "label": "List COM Ports",
+      "type": "process",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "Get-CimInstance Win32_SerialPort | Select-Object DeviceID, Name, Description"
+      ],
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Serial Monitor",
+      "type": "process",
+      "command": "C:/Program Files/PuTTY/plink.exe",
+      "args": [
+        "-serial",
+        "${input:serialPort}",
+        "-sercfg",
+        "115200,8,n,1,N"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+
+    {
+      "label": "Clean Build",
+      "type": "process",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "Remove-Item -Recurse -Force \"${workspaceFolder}/build\" -ErrorAction SilentlyContinue"
+      ],
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Clean Zephyr Cache",
+      "type": "process",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "Remove-Item -Recurse -Force \"C:/ZephyrUPM/zephyrproject-4.4/zephyr/.cache\" -ErrorAction SilentlyContinue"
+      ],
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Zephyr: Debug Server",
+      "type": "process",
+      "command": "C:/ZephyrUPM/zephyrproject-4.4/.venv/Scripts/west.exe",
+      "args": [
+        "debugserver",
+        "-d",
+        "${workspaceFolder}/build"
+      ],
+      "options": {
+        "cwd": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
+        "env": {
+          "ZEPHYR_BASE": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
+          "ZEPHYR_TOOLCHAIN_VARIANT": "zephyr",
+          "ZEPHYR_SDK_INSTALL_DIR": "C:/Users/davma/zephyr-sdk-1.0.1"
+        }
+      },
+      "dependsOn": ["West Build (auto)"],
+      "dependsOrder": "sequence",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "zephyr-debug",
+        "pattern": {
+          "regexp": "^(.*)$",
+          "message": 1
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*(Open On-Chip Debugger|OpenOCD).*",
+          "endsPattern": ".*(Listening on port 3333 for gdb connections|OpenOCD GDB server running on port 3333).*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+
+    {
+      "label": "Zephyr: Stop Debug Server",
+      "type": "process",
+      "command": "taskkill",
+      "args": [
+        "/F",
+        "/IM",
+        "openocd.exe"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    }
+  ],
+
+  "inputs": [
+    {
+      "id": "serialPort",
+      "type": "promptString",
+      "description": "Puerto COM de la NUCLEO-WL55JC",
+      "default": "COM5"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  // Indica la versión del formato que VS Code usa para este archivo de depuración.
+  "version": "0.2.0",
+
+  // Contiene todas las configuraciones de depuración disponibles en este proyecto.
+  "configurations": [
+    {
+      // Es el nombre que aparece en el selector "Ejecutar y depurar" de VS Code.
+      "name": "Debug Zephyr - NUCLEO-WL55JC",
+
+      // Usa la extensión Cortex-Debug para controlar la sesión de depuración.
+      "type": "cortex-debug",
+      // Inicia una nueva sesión; no se conecta a una sesión ya iniciada.
+      "request": "launch",
+
+      // Establece la carpeta raíz del proyecto como directorio de trabajo.
+      "cwd":
+        "${workspaceFolder}",
+
+      // Selecciona el ejecutable ELF generado por Zephyr, que contiene el programa y los símbolos de depuración.
+      "executable":
+        "${workspaceFolder}/build/zephyr/zephyr.elf",
+
+      // Indica que el servidor de depuración se inicia mediante una tarea externa.
+      "servertype": "external",
+      // Conecta GDB al servidor OpenOCD que escucha en el puerto local 3333.
+      "gdbTarget": "localhost:3333",
+
+      // Indica la carpeta que contiene las herramientas ARM del SDK de Zephyr.
+      "armToolchainPath":
+        "C:/Users/davma/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/bin",
+
+      // Define el prefijo común de los ejecutables de la cadena de herramientas ARM.
+      "toolchainPrefix":
+        "arm-zephyr-eabi",
+
+      // Especifica el programa GDB que depurará el firmware ARM.
+      "gdbPath":
+        "C:/Users/davma/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb.exe",
+
+      // Antes de depurar, ejecuta la tarea que compila el proyecto e inicia OpenOCD.
+      "preLaunchTask": "Zephyr: Debug Server",
+
+      // Tras arrancar, continúa la ejecución hasta llegar a la función main.
+      "runToEntryPoint": "main",
+
+      // Al terminar la depuración, ejecuta la tarea que cierra OpenOCD.
+      "postDebugTask": "Zephyr: Stop Debug Server",
+
+      // Oculta los mensajes internos de diagnóstico de la extensión Cortex-Debug.
+      "showDevDebugOutput": "none"
+    }
+  ]
+}

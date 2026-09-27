@@ -1,0 +1,15 @@
+# Zephyr build outputs
+build/
+build-*/
+.zephyr-cache/
+
+# Generated files
+compile_commands.json
+
+# VS Code local noise
+.vscode/.ropeproject/
+
+# OS noise
+Thumbs.db
+Desktop.ini
+.DS_Store
