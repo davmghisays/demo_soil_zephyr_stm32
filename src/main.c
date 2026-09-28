@@ -11,33 +11,39 @@
 #include <zephyr/sys/byteorder.h>
 #include <zephyr/sys/printk.h>
 
-#define SAMPLE_PERIOD K_MINUTES(60)
-#define BLE_ADVERTISING_TIME K_SECONDS(2)
+#define SAMPLE_PERIOD K_MINUTES(60) // Definición de tiempo de espera entre mediciones
+#define BLE_ADVERTISING_TIME K_SECONDS(2) //Tiempo máximo de broadcast del BLE
 
+// Direcciones del sensor en I2C. No tiene controlador
 #define CHIRP_I2C_ADDR 0x20
 #define CHIRP_REG_CAPACITANCE 0x00
 #define CHIRP_REG_BUSY 0x09
 #define CHIRP_BUSY_POLL_TIME K_MSEC(10)
 #define CHIRP_BUSY_MAX_POLLS 100
 
+// Obtención de los dispositivos del Devicetree declarados en el overlay
 static const struct device *const i2c_bus = DEVICE_DT_GET(DT_NODELABEL(i2c1));
 static const struct device *const soil_power = DEVICE_DT_GET(DT_NODELABEL(soil_power));
 
+//hourly timer es un temporizador y K_SEM_DEFINE es el semáforo que se bloquea
 static struct k_timer hourly_timer;
 static K_SEM_DEFINE(sample_due, 0, 1);
 
+//Cuando el tiempo se vence,  hace esto. Desbloquear el semáforo
 static void hourly_timer_expired(struct k_timer *timer)
 {
 	ARG_UNUSED(timer);
 	k_sem_give(&sample_due);
 }
 
+//Activa la conversación con el sensor. Aquí devuelve ret, que dice si lo logró o no (la comunicación)
 static int chirp_read(uint8_t reg, uint8_t *data, size_t length)
 {
 	return i2c_write_read(i2c_bus, CHIRP_I2C_ADDR,
 			      &reg, sizeof(reg), data, length);
 }
 
+// Aquí mira como está el sensor. Si es 0, ya terminó y todo bien, si es menor que 0, está en fallo. repite y reintenta.
 static int chirp_wait_until_ready(void)
 {
 	uint8_t busy;
@@ -59,6 +65,10 @@ static int chirp_wait_until_ready(void)
 	return -ETIMEDOUT;
 }
 
+// Esta es la función de lectura. El get manda energía al sensor, luego envía energía al bus.
+//		Si ambos están, entonces lee la capacitancia que le da el sensor
+//		La primera medida se desecha. Se toma la segunda.
+//		Finalmente apaga bus y sensor con put
 static int read_moisture_raw(uint16_t *moisture)
 {
 	uint8_t response[2];
@@ -95,6 +105,9 @@ static int read_moisture_raw(uint16_t *moisture)
 	return ret;
 }
 
+
+// Aqui activa el BLE para enviar. Los primeros dos términos son el fabricante. Los segundos dos son los dos bytes de la lectura
+//		En orden Alto y Bajo tal como aparecen
 static int transmit_ble(uint16_t moisture)
 {
 	uint8_t manufacturer_data[] = { 0xff, 0xff, moisture >> 8, moisture & 0xff };
@@ -119,6 +132,13 @@ static int transmit_ble(uint16_t moisture)
 	return ret;
 }
 
+
+//El main hace varias cosas.
+//		1. Verifica que el bus y el sensor no estén en error.
+//		2. Arranca el temporizador de 1 hora
+//		3. Arranca el ciclo que espera el semáforo, que es liberado por el temporizador
+//		4. Realiza la lectura del sensor
+//		5. Transmite la lectura obtenida por BLE haciendo un advertising
 int main(void)
 {
 	uint16_t moisture = 0;
