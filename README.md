@@ -50,7 +50,6 @@ adicional en la aplicación.
 
 ```text
 src/main.c                         lógica de aplicación
-src/main_comentado.c              copia pedagógica que no se compila
 boards/nucleo_wb55rg.overlay       descripción/adaptación de hardware
 confs/prj_nucleo_wb55rg.conf       configuración Kconfig de Zephyr
 CMakeLists.txt                     fuentes de la aplicación
