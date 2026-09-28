@@ -5,7 +5,7 @@
 > - **Zephyr OS:** 4.4.2
 > - **Zephyr SDK:** 1.0.1
 > - **Python:** 3.12
-> - **Board:** `nucleo_wl55jc` / STM32WL55JC
+> - **Board:** `nucleo_wb55rg` / STM32WB55RG
 > - **IDE:** Visual Studio Code
 > - **Build tool:** `west` + CMake + Ninja
 > - **Flashing:** STM32CubeProgrammer / ST-LINK
@@ -253,10 +253,10 @@ mi_proyecto
 │   └── tasks.json
 │
 ├── boards
-│   └── nucleo_wl55jc.overlay
+│   └── nucleo_wb55rg.overlay
 │
 ├── confs
-│   └── prj_nucleo_wl55jc.conf
+│   └── prj_nucleo_wb55rg.conf
 │
 ├── src
 │   └── main.c
@@ -383,7 +383,7 @@ Archivo:
         "auto",
 
         "-b",
-        "nucleo_wl55jc",
+        "nucleo_wb55rg",
 
         "${workspaceFolder}",
 
@@ -392,9 +392,9 @@ Archivo:
 
         "--",
 
-        "-DDTC_OVERLAY_FILE=boards/nucleo_wl55jc.overlay",
+        "-DDTC_OVERLAY_FILE=boards/nucleo_wb55rg.overlay",
 
-        "-DCONF_FILE=confs/prj_nucleo_wl55jc.conf"
+        "-DCONF_FILE=confs/prj_nucleo_wb55rg.conf"
       ],
 
       "options": {
@@ -642,7 +642,7 @@ Archivo:
     {
       "id": "serialPort",
       "type": "promptString",
-      "description": "Puerto COM de la NUCLEO-WL55JC",
+      "description": "Puerto COM de la NUCLEO-WB55RG",
       "default": "COM5"
     }
   ]
@@ -656,8 +656,8 @@ Archivo:
 Usar:
 
 ```jsonc
-"-DDTC_OVERLAY_FILE=boards/nucleo_wl55jc.overlay",
-"-DCONF_FILE=confs/prj_nucleo_wl55jc.conf"
+"-DDTC_OVERLAY_FILE=boards/nucleo_wb55rg.overlay",
+"-DCONF_FILE=confs/prj_nucleo_wb55rg.conf"
 ```
 
 evita un problema de Windows + CMake.
@@ -833,18 +833,18 @@ Ejemplo robusto:
 
 ```powershell
 west build -p always `
-  -b nucleo_wl55jc `
+  -b nucleo_wb55rg `
   C:/ZephyrUPM/workspace/mi_proyecto `
   -d C:/ZephyrUPM/workspace/mi_proyecto/build `
   -- `
-  "-DDTC_OVERLAY_FILE=C:/ZephyrUPM/workspace/mi_proyecto/boards/nucleo_wl55jc.overlay" `
-  "-DCONF_FILE=C:/ZephyrUPM/workspace/mi_proyecto/confs/prj_nucleo_wl55jc.conf"
+  "-DDTC_OVERLAY_FILE=C:/ZephyrUPM/workspace/mi_proyecto/boards/nucleo_wb55rg.overlay" `
+  "-DCONF_FILE=C:/ZephyrUPM/workspace/mi_proyecto/confs/prj_nucleo_wb55rg.conf"
 ```
 
 Si PowerShell empieza a interpretar mal argumentos multiline, usar una sola línea:
 
 ```powershell
-west build -p always -b nucleo_wl55jc C:/ZephyrUPM/workspace/mi_proyecto -d C:/ZephyrUPM/workspace/mi_proyecto/build -- "-DDTC_OVERLAY_FILE=C:/ZephyrUPM/workspace/mi_proyecto/boards/nucleo_wl55jc.overlay" "-DCONF_FILE=C:/ZephyrUPM/workspace/mi_proyecto/confs/prj_nucleo_wl55jc.conf"
+west build -p always -b nucleo_wb55rg C:/ZephyrUPM/workspace/mi_proyecto -d C:/ZephyrUPM/workspace/mi_proyecto/build -- "-DDTC_OVERLAY_FILE=C:/ZephyrUPM/workspace/mi_proyecto/boards/nucleo_wb55rg.overlay" "-DCONF_FILE=C:/ZephyrUPM/workspace/mi_proyecto/confs/prj_nucleo_wb55rg.conf"
 ```
 
 ---
@@ -900,7 +900,7 @@ prj.conf
 
 ---
 
-# 17. Flashear la NUCLEO-WL55JC
+# 17. Flashear la NUCLEO-WB55RG
 
 Conectar la placa por USB.
 
@@ -1183,7 +1183,7 @@ Para saber qué define realmente la board:
 
 ```powershell
 Select-String `
-  -Path "C:\ZephyrUPM\zephyrproject-4.4\zephyr\boards\st\nucleo_wl55jc\nucleo_wl55jc.dts" `
+  -Path "C:\ZephyrUPM\zephyrproject-4.4\zephyr\boards\st\nucleo_wb55rg\nucleo_wb55rg.dts" `
   -Pattern "led_"
 ```
 
@@ -1234,8 +1234,8 @@ Antes de programar:
 - [ ] `${workspaceFolder}` corresponde a esa carpeta
 - [ ] `CMakeLists.txt` correcto
 - [ ] `src/main.c` existe
-- [ ] `boards/nucleo_wl55jc.overlay` existe
-- [ ] `confs/prj_nucleo_wl55jc.conf` existe
+- [ ] `boards/nucleo_wb55rg.overlay` existe
+- [ ] `confs/prj_nucleo_wb55rg.conf` existe
 - [ ] `.vscode/settings.json` apunta a Zephyr 4.4.2
 - [ ] `.vscode/tasks.json` apunta al venv 4.4
 - [ ] SDK apunta a 1.0.1
@@ -1443,7 +1443,7 @@ ST-LINK / SWD
 
    ↓
 
-STM32WL55JC
+STM32WB55RG
 ```
 
 ---

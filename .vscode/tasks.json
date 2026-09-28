@@ -9,12 +9,12 @@
       "args": [
         "build",
         "-p", "auto",
-        "-b", "nucleo_wl55jc",
+        "-b", "nucleo_wb55rg",
         "${workspaceFolder}",
         "-d", "${workspaceFolder}/build",
         "--",
-        "-DDTC_OVERLAY_FILE=boards/nucleo_wl55jc.overlay",
-        "-DCONF_FILE=confs/prj_nucleo_wl55jc.conf"
+        "-DDTC_OVERLAY_FILE=boards/nucleo_wb55rg.overlay",
+        "-DCONF_FILE=confs/prj_nucleo_wb55rg.conf"
       ],
       "options": {
         "cwd": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
@@ -43,12 +43,12 @@
       "args": [
         "build",
         "-p", "always",
-        "-b", "nucleo_wl55jc",
+        "-b", "nucleo_wb55rg",
         "${workspaceFolder}",
         "-d", "${workspaceFolder}/build",
         "--",
-        "-DDTC_OVERLAY_FILE=boards/nucleo_wl55jc.overlay",
-        "-DCONF_FILE=confs/prj_nucleo_wl55jc.conf"
+        "-DDTC_OVERLAY_FILE=boards/nucleo_wb55rg.overlay",
+        "-DCONF_FILE=confs/prj_nucleo_wb55rg.conf"
       ],
       "options": {
         "cwd": "C:/ZephyrUPM/zephyrproject-4.4/zephyr",
@@ -209,7 +209,7 @@
     {
       "id": "serialPort",
       "type": "promptString",
-      "description": "Puerto COM de la NUCLEO-WL55JC",
+      "description": "Puerto COM de la NUCLEO-WB55RG",
       "default": "COM5"
     }
   ]

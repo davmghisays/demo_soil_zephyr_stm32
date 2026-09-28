@@ -1,0 +1,18 @@
+/ {
+	/* PC7 habilita la alimentación del Chirp mediante un dominio de Zephyr. */
+	soil_power: soil-sensor-power {
+		compatible = "power-domain-gpio";
+		enable-gpios = <&gpioc 7 GPIO_ACTIVE_HIGH>;
+		startup-delay-us = <1000000>;
+		#power-domain-cells = <0>;
+		zephyr,pm-device-runtime-auto;
+	};
+};
+
+/*
+ * I2C1 ya está configurado por la NUCLEO-WB55RG:
+ * PB8 = SCL, PB9 = SDA.
+ */
+&i2c1 {
+    zephyr,pm-device-runtime-auto;
+};

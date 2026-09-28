@@ -6,7 +6,7 @@
   "configurations": [
     {
       // Es el nombre que aparece en el selector "Ejecutar y depurar" de VS Code.
-      "name": "Debug Zephyr - NUCLEO-WL55JC",
+      "name": "Debug Zephyr - NUCLEO-WB55RG",
 
       // Usa la extensión Cortex-Debug para controlar la sesión de depuración.
       "type": "cortex-debug",
